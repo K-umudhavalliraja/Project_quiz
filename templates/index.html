@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>{% block title %}home{% endblock %}</title>
+</head>
+<body style="background-color:honeydew;">
+
+        {% block content %}
+        <div class="container-fluid">
+            <div style="margin-left: 80%;">
+                <br>
+                {% if user.is_superuser %}
+                <a href="{% url 'adminquiz' %}"><input type="button" class ="btn btn-success" value="Admin Quiz page"></a>
+                <a href="{% url 'logout' %}"><input type="button" class= "btn btn-danger" value="Logout"></a>
+                {% else %}
+                <a href="{% url 'login' %}"><input type="button" class ="btn btn-warning" value="Admin Login"></a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class= "col">
+                    <table class="table text-center" style = "border: solid black; margin-top:5%;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">S.No</th>
+                                <th scope="col">Quiz</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in quizzes %}
+                                <tr scope="row">
+                                    <th>{{forloop.counter}}</th>
+                                    <td>{{quiz.title}}</td>
+                                    <td><a href="{% url 'quiztest' quiz.id %}"><button class="btn btn-info">Take Test</button></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>

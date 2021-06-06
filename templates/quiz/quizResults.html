@@ -1,0 +1,25 @@
+{% extends "index.html" %}
+
+{% block title %}Quiz Result{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row ">
+        <div class="col">
+            <div class="card" style = "margin-top: 10%;">
+                <div class="card-body">
+                    <h2> Quiz Result</h2>
+                    <hr>
+                    <div class="text-center">
+                        <p>Time taken : {{ timeTaken }}</p><br>
+                        <p>Marks Secured: {{mark}}/{{totalmark}}</p><br>
+                        <p>Result : {{result}}</p>
+                    </div>
+                    <br>
+                    <a href="{% url 'home' %}"><input type="button" class="btn btn-primary" value="Home"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

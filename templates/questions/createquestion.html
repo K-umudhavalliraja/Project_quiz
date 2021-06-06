@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Create Question {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col" style="margin-top: 10%;">
+            <div class="card">
+                <div class="card-body">
+                    <h1>Quiz Name - {{quiz}}</h1>
+                    <br>
+                    <h4>{{val}} Question:</h4>
+                    <hr>
+                    <form method = "POST">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <br>
+                        <input type="submit" class="btn btn-primary" value="{{val}}">
+                        <a href="{% url 'adminquestions' quiz.id %}"><input type="button" class="btn btn-secondary" value="Back"></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

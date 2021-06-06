@@ -1,0 +1,101 @@
+{% extends 'index.html' %}
+
+{% block title %} Test {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col" style="margin-top: 10%;">
+            {% if question %}
+                <h1>Quiz - {{question.quiz_name}}</h1><br>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exitModal">End Test</button>
+                <br><br>
+                <div class="card">
+                    <div class="card-body">
+                        <p>{{qNo}}) {{question.question_title}}</p><hr>
+                        <span><input type="radio" name="option" onclick="checkAnswer()" id="A" value="A"> {{question.option1}}</span><br>
+                        <span><input type="radio" name="option" onclick="checkAnswer()" id="B" value="B"> {{question.option2}}</span><br>
+                        <span><input type="radio" name="option" onclick="checkAnswer()" id="C" value="C"> {{question.option3}}</span><br>
+                        <span><input type="radio" name="option" onclick="checkAnswer()" id="D" value="D"> {{question.option4}}</span><br><br>    
+                        <p id="answer"></p>
+                        
+                        <form method="POST" id=submitform hidden>
+                            {% csrf_token %}
+                            <input type="hidden" id="mark" name="mark" value="">
+                            <input type="hidden" name="startTime" value = "{{startTime}}">
+                            <input type="hidden" name="availableQ" value="{{availableQ}}">
+                            <input type="hidden" name="currentQ" value="{{question.id}}">
+                            <input type="hidden" name="qNo" value = "{{qNo}}">
+                            {% if lastQ %}
+                            <input type="hidden" id="endTime" name="endTime" value="">
+                            <input type="button" class ="btn btn-success" onclick="submitForm()" value="Submit">
+                            {% else %}
+                            <input type="submit" class ="btn btn-primary" value="Next">
+                            {% endif %}
+                        </form>
+                    </div>
+                {% else %}
+                <p class="alert alert-warning" style="font-size: large;"><strong>There is no questions available for this quiz.</strong> Contact School to create questions for this Quiz</p>
+               <a href="{% url 'home' %}"><input type="button" class = "btn btn-secondary" value="Home"></a> 
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>  
+
+
+<!-- Exit Modal -->
+<div class="modal fade" id="exitModal" tabindex="-1" role="dialog" aria-labelledby="exitModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exitModalLabel">End This</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>do you want end this test??</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <a href="{% url 'home' %}"><button type="button" class="btn btn-danger">Exit</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+    function checkAnswer(){
+        var correct_answer = "{{question.correct_answer}}";
+        var options  = document.getElementsByName('option');
+        var mark = Number("{{mark}}");
+        
+        for( var i = 0; i < options.length ; i++ ){
+            if(options[i].checked){
+                if (options[i].value == correct_answer ){
+                    document.getElementById("answer").className = "alert alert-success";
+                    document.getElementById("answer").innerHTML = "You have Chosen the correct answer";
+                    mark += 1; 
+                }else{
+                    document.getElementById("answer").className = "alert alert-danger";
+                    document.getElementById("answer").innerHTML = "Wrong! The correct answer is " + correct_answer;
+                }
+                document.getElementById("submitform").hidden = false;
+            }
+            options[i].disabled = true
+        }
+        document.getElementById("mark").value = mark;
+    }
+
+    function submitForm(){
+        var d = new Date();
+        var endtime = d.getTime()/1000;
+        document.getElementById("endTime").value = endtime;
+        document.getElementById("submitform").submit();
+    }
+
+</script>
+
+{% endblock %}
